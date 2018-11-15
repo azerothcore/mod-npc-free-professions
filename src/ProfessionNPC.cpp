@@ -203,7 +203,10 @@ public:
 				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "|TInterface\\icons\\INV_Misc_Herb_07:30|t Herbalism.", GOSSIP_SENDER_MAIN, 9);
 				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "|TInterface\\icons\\inv_misc_pelt_wolf_01:30|t Skinning.", GOSSIP_SENDER_MAIN, 10);
 				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "|TInterface\\icons\\trade_mining:30|t Mining.", GOSSIP_SENDER_MAIN, 11);
-				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "|TInterface/ICONS/Thrown_1H_Harpoon_D_01Blue:30|t Nevermind!", GOSSIP_SENDER_MAIN, 12);
+				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "|TInterface\\icons\\spell_holy_sealofsacrifice:30|t First Aid.", GOSSIP_SENDER_MAIN, 12);
+				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "|TInterface\\icons\\Inv_misc_food_65:30|t Cooking.", GOSSIP_SENDER_MAIN, 13);
+				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, "|TInterface\\icons\\Inv_fishingpole_01:30|t Fishing.", GOSSIP_SENDER_MAIN, 14);
+				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "|TInterface/ICONS/Thrown_1H_Harpoon_D_01Blue:30|t Nevermind!", GOSSIP_SENDER_MAIN, 15);
 				pPlayer->PlayerTalkClass->SendGossipMenu(1, _creature->GetGUID());
 				break;
 			case 1:
@@ -318,6 +321,36 @@ public:
 				pPlayer->PlayerTalkClass->SendCloseGossip();
 				break;
 			case 12:
+				if (pPlayer->HasSkill(SKILL_FIRST_AID))
+				{
+					pPlayer->PlayerTalkClass->SendCloseGossip();
+					break;
+				}
+
+				CompleteLearnProfession(pPlayer, _creature, SKILL_FIRST_AID);
+				pPlayer->PlayerTalkClass->SendCloseGossip();
+				break;
+			case 13:
+				if (pPlayer->HasSkill(SKILL_COOKING))
+				{
+					pPlayer->PlayerTalkClass->SendCloseGossip();
+					break;
+				}
+
+				CompleteLearnProfession(pPlayer, _creature, SKILL_COOKING);
+				pPlayer->PlayerTalkClass->SendCloseGossip();
+				break;
+			case 14:
+				if (pPlayer->HasSkill(SKILL_FISHING))
+				{
+					pPlayer->PlayerTalkClass->SendCloseGossip();
+					break;
+				}
+
+				CompleteLearnProfession(pPlayer, _creature, SKILL_FISHING);
+				pPlayer->PlayerTalkClass->SendCloseGossip();
+				break;
+			case 15:
 				pPlayer->PlayerTalkClass->SendCloseGossip();
 				break;
 			}
