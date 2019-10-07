@@ -1,5 +1,5 @@
 sudo: required
-dist: bionic # (18.04)#
+dist: bionic # (18.04)
 
 language: cpp
 
