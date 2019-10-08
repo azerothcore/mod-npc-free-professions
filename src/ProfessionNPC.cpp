@@ -53,6 +53,7 @@ NPC professions give 2 professions free
 #include "ScriptedGossip.h"
 #include "Language.h"
 #include "Player.h"
+#include "Chat.h"
 
 class ProfessionNPC : public CreatureScript
 {
