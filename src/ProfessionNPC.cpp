@@ -49,8 +49,19 @@ NPC professions give 2 professions free
 
 */
 
-#include "ScriptMgr.h"
+#include "Define.h"
+#include "Player.h"
+#include "Item.h"
+#include "DBCStores.h"
+#include "Log.h"
+#include "DatabaseEnv.h"
+#include "WorldSession.h"
 #include "ScriptedGossip.h"
+#include "ScriptMgr.h"
+#include "ScriptedCreature.h"
+#include "GossipDef.h"
+#include "Creature.h"
+#include "ObjectMgr.h"
 #include "Language.h"
 #include "Player.h"
 #include "Chat.h"
