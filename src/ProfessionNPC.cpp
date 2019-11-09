@@ -48,20 +48,8 @@ NPC professions give 2 professions free
 - This code and content is released under the [GNU AGPL v3](https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3).
 
 */
-
-#include "Define.h"
-#include "Player.h"
-#include "Item.h"
-#include "DBCStores.h"
-#include "Log.h"
-#include "DatabaseEnv.h"
-#include "WorldSession.h"
-#include "ScriptedGossip.h"
 #include "ScriptMgr.h"
-#include "ScriptedCreature.h"
-#include "GossipDef.h"
-#include "Creature.h"
-#include "ObjectMgr.h"
+#include "ScriptedGossip.h"
 #include "Language.h"
 #include "Player.h"
 #include "Chat.h"
