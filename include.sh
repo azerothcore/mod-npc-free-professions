@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-
-ProfessionNPC_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/" && pwd )"
-
-source $ProfessionNPC_ROOT"/conf/conf.sh.dist"
-
-if [ -f $ProfessionNPC_ROOT"/conf/conf.sh" ]; then
-    source $ProfessionNPC_ROOT"/conf/conf.sh"
-fi
+	
+	MOD_PROFESSION_NPC_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/" && pwd )"
+	
+	source $MOD_PROFESSION_NPC_ROOT"/conf/conf.sh.dist"
+	
+	if [ -f $MOD_PROFESSION_NPC_ROOT"/conf/conf.sh" ]; then
+	    source $MOD_PROFESSION_NPC_ROOT"/conf/conf.sh"
+	fi
