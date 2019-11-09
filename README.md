@@ -1,7 +1,6 @@
-# ![logo](https://raw.githubusercontent.com/azerothcore/azerothcore.github.io/master/images/logo-github.png) AzerothCore
 # Professions NPC
 ### This is a module for [AzerothCore](http://www.azerothcore.org)
-- Latest build status with azerothcore: [![Build Status](https://travis-ci.org/azerothcore/mod-npc-free-professions.svg?branch=master)](https://travis-ci.org/azerothcore/mod-npc-free-professions)
+- Latest build status with azerothcore: [![Build Status](https://travis-ci.org/milestorme/mod-npc-free-professions.svg?branch=master)](https://travis-ci.org/milestorme/mod-npc-free-professions)
 
 This is a module for [AzerothCore](http://www.azerothcore.org)
 
