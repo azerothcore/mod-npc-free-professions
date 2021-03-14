@@ -120,13 +120,28 @@ public:
                     player->learnSpell(51309);
                     break;
                 case SKILL_COOKING:
+                    player->learnSpell(2550);
+                    player->learnSpell(3102);
+                    player->learnSpell(3413);
+                    player->learnSpell(18260);
+                    player->learnSpell(33359);
                     player->learnSpell(51296);
                     break;
                 case SKILL_FIRST_AID:
+                    player->learnSpell(3273);
+                    player->learnSpell(3274);
+                    player->learnSpell(7924);
+                    player->learnSpell(10846);
+                    player->learnSpell(27028);
                     player->learnSpell(45542);
                     break;
                 case SKILL_FISHING:
-                    player->learnSpell(65293);
+                    player->learnSpell(7620);
+                    player->learnSpell(7731);
+                    player->learnSpell(7732);
+                    player->learnSpell(18248);
+                    player->learnSpell(33095);
+                    player->learnSpell(51294);
                     break;
                 case SKILL_MINING:
                     player->learnSpell(2575);
@@ -166,6 +181,9 @@ public:
                 {
                     if (SkillLineAbilityEntry const *SkillLine = sSkillLineAbilityStore.LookupEntry(i))
                     {
+                        if (!SkillLine || player->HasSpell(SkillLine->spellId) || SkillLine->spellId == 62734)
+                            continue;
+
                         if (SkillLine->skillId != SkillInfo->id)
                             continue;
 
