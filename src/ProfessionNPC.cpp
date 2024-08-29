@@ -1,6 +1,8 @@
 #include "ScriptMgr.h"
 #include "Player.h"
 #include "ScriptedGossip.h"
+#include "Chat.h"
+#include "SpellMgr.h"
 
 class CreatureScript_Professions : public CreatureScript
 {
@@ -36,7 +38,7 @@ public:
         {
             if (player->HasSkill(SKILL))
             {
-                player->GetSession()->SendNotification("You already have this work!");
+                ChatHandler(player->GetSession()).SendNotification("You already have this work!");
                 CloseGossipMenuFor(player);
             }
             else
