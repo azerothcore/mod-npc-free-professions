@@ -62,48 +62,20 @@ public:
     {
         if (ModConfigEnable)
         {
-            if (ModConfigEnableAlchemy){
-                AddGossipItemFor(player, GOSSIP_ICON_TRAINER, "Alchemy", GOSSIP_SENDER_MAIN, SKILL_ALCHEMY);
-            }
-            if (ModConfigEnableBlacksmithing){
-                AddGossipItemFor(player, GOSSIP_ICON_TRAINER, "Blacksmithing", GOSSIP_SENDER_MAIN, SKILL_BLACKSMITHING);
-            }
-            if (ModConfigEnableLeatherworking){
-                AddGossipItemFor(player, GOSSIP_ICON_TRAINER, "Leatherworking", GOSSIP_SENDER_MAIN, SKILL_LEATHERWORKING);
-            }
-            if (ModConfigEnableTailoring){
-                AddGossipItemFor(player, GOSSIP_ICON_TRAINER, "Tailoring", GOSSIP_SENDER_MAIN, SKILL_TAILORING);
-            }
-            if (ModConfigEnableEngineering){
-                AddGossipItemFor(player, GOSSIP_ICON_TRAINER, "Engineering", GOSSIP_SENDER_MAIN, SKILL_ENGINEERING);
-            }
-            if (ModConfigEnableEnchanting){
-                AddGossipItemFor(player, GOSSIP_ICON_TRAINER, "Enchanting", GOSSIP_SENDER_MAIN, SKILL_ENCHANTING);
-            }
-            if (ModConfigEnableJewelcrafting){
-                AddGossipItemFor(player, GOSSIP_ICON_TRAINER, "Jewelcrafting", GOSSIP_SENDER_MAIN, SKILL_JEWELCRAFTING);
-            }
-            if (ModConfigEnableInscription){
-                AddGossipItemFor(player, GOSSIP_ICON_TRAINER, "Inscription", GOSSIP_SENDER_MAIN, SKILL_INSCRIPTION);
-            }
-            if (ModConfigEnableHerbalism){
-                AddGossipItemFor(player, GOSSIP_ICON_TRAINER, "Herbalism", GOSSIP_SENDER_MAIN, SKILL_HERBALISM);
-            }
-            if (ModConfigEnableSkinning){
-                AddGossipItemFor(player, GOSSIP_ICON_TRAINER, "Skinning", GOSSIP_SENDER_MAIN, SKILL_SKINNING);
-            }
-            if (ModConfigEnableMining){
-                AddGossipItemFor(player, GOSSIP_ICON_TRAINER, "Mining", GOSSIP_SENDER_MAIN, SKILL_MINING);
-            }
-            if (ModConfigEnableCooking){
-                AddGossipItemFor(player, GOSSIP_ICON_TRAINER, "Cooking", GOSSIP_SENDER_MAIN, SKILL_COOKING);
-            }
-            if (ModConfigEnableFirstAid){
-                AddGossipItemFor(player, GOSSIP_ICON_TRAINER, "First Aid", GOSSIP_SENDER_MAIN, SKILL_FIRST_AID);
-            }
-            if (ModConfigEnableFishing){
-                AddGossipItemFor(player, GOSSIP_ICON_TRAINER, "Fishing", GOSSIP_SENDER_MAIN, SKILL_FISHING);
-            }
+            AddGossipItemForProfession(ModConfigEnableAlchemy, player, "Alchemy", SKILL_ALCHEMY);
+            AddGossipItemForProfession(ModConfigEnableBlacksmithing, player, "Blacksmithing", SKILL_BLACKSMITHING);
+            AddGossipItemForProfession(ModConfigEnableLeatherworking, player, "Leatherworking", SKILL_LEATHERWORKING);
+            AddGossipItemForProfession(ModConfigEnableTailoring, player, "Tailoring", SKILL_TAILORING);
+            AddGossipItemForProfession(ModConfigEnableEngineering, player, "Engineering", SKILL_ENGINEERING);
+            AddGossipItemForProfession(ModConfigEnableEnchanting, player, "Enchanting", SKILL_ENCHANTING);
+            AddGossipItemForProfession(ModConfigEnableJewelcrafting, player, "Jewelcrafting", SKILL_JEWELCRAFTING);
+            AddGossipItemForProfession(ModConfigEnableInscription, player, "Inscription", SKILL_INSCRIPTION);
+            AddGossipItemForProfession(ModConfigEnableHerbalism, player, "Herbalism", SKILL_HERBALISM);
+            AddGossipItemForProfession(ModConfigEnableSkinning, player, "Skinning", SKILL_SKINNING);
+            AddGossipItemForProfession(ModConfigEnableMining, player, "Mining", SKILL_MINING);
+            AddGossipItemForProfession(ModConfigEnableCooking, player, "Cooking", SKILL_COOKING);
+            AddGossipItemForProfession(ModConfigEnableFirstAid, player, "First Aid", SKILL_FIRST_AID);
+            AddGossipItemForProfession(ModConfigEnableFishing, player, "Fishing", SKILL_FISHING);
             SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature);
         }
 
@@ -261,7 +233,7 @@ public:
                 player->SetSkill(SkillInfo->id, player->GetSkillStep(SkillInfo->id), ModConfigGivenCraftLevel, 450);
 
                 uint32 ClassMask = player->getClassMask();
-
+                
                 for (uint32 i = 0; i < sSkillLineAbilityStore.GetNumRows(); ++i)
                 {
                     if (SkillLineAbilityEntry const *SkillLine = sSkillLineAbilityStore.LookupEntry(i))
@@ -323,6 +295,12 @@ public:
             SkillCount--;
 
         return SkillCount < sWorld->getIntConfig(CONFIG_MAX_PRIMARY_TRADE_SKILL);
+    }
+
+    static void AddGossipItemForProfession(bool enabled, Player* player, const std::string& name, SkillType skill) {
+        if (enabled) {
+            AddGossipItemFor(player, GOSSIP_ICON_TRAINER, name, GOSSIP_SENDER_MAIN, skill);
+        }
     }
 };
 
