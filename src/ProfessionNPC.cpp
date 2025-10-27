@@ -198,7 +198,7 @@ public:
                     player->learnSpell(7732);
                     player->learnSpell(18248);
                     player->learnSpell(33095);
-                    player->learnSpell(64484);
+                    player->learnSpell(51294);
                     break;
                 case SKILL_MINING:
                     player->learnSpell(2575);
@@ -252,7 +252,7 @@ public:
 
                         SpellInfo const *SpellInfo2 = sSpellMgr->GetSpellInfo(SkillLine->Spell);
 
-                        if (!SpellInfo2 || !SpellMgr::IsSpellValid(SpellInfo2))
+                        if (!SpellInfo2 || !SpellMgr::IsSpellValid(SpellInfo2) || SpellInfo2->Id == 62734)
                             continue;
 
                         player->learnSpell(SkillLine->Spell);
