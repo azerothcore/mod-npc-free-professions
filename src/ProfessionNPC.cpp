@@ -108,116 +108,130 @@ public:
             switch (skill)
             {
                 case SKILL_ALCHEMY:
-                    player->learnSpell(SPELL_APPRENTICE_ALCHEMY);
-                    player->learnSpell(SPELL_JOURNEYMAN_ALCHEMY);
-                    player->learnSpell(SPELL_EXPERT_ALCHEMY);
-                    player->learnSpell(SPELL_ARTISAN_ALCHEMY);
-                    player->learnSpell(SPELL_MASTER_ALCHEMY);
-                    player->learnSpell(SPELL_GRAND_MASTER_ALCHEMY);
+                    LearnSpells(player, {
+                        SPELL_APPRENTICE_ALCHEMY, 
+                        SPELL_JOURNEYMAN_ALCHEMY, 
+                        SPELL_EXPERT_ALCHEMY, 
+                        SPELL_ARTISAN_ALCHEMY, 
+                        SPELL_MASTER_ALCHEMY, 
+                        SPELL_GRAND_MASTER_ALCHEMY});
                     break;
                 case SKILL_BLACKSMITHING:
-                    player->learnSpell(SPELL_APPRENTICE_BLACKSMITHING);
-                    player->learnSpell(SPELL_JOURNEYMAN_BLACKSMITHING);
-                    player->learnSpell(SPELL_EXPERT_BLACKSMITHING);
-                    player->learnSpell(SPELL_ARTISAN_BLACKSMITHING);
-                    player->learnSpell(SPELL_MASTER_BLACKSMITHING);
-                    player->learnSpell(SPELL_GRAND_MASTER_BLACKSMITHING);
+                    LearnSpells(player, {
+                        SPELL_APPRENTICE_BLACKSMITHING, 
+                        SPELL_JOURNEYMAN_BLACKSMITHING, 
+                        SPELL_EXPERT_BLACKSMITHING, 
+                        SPELL_ARTISAN_BLACKSMITHING, 
+                        SPELL_MASTER_BLACKSMITHING, 
+                        SPELL_GRAND_MASTER_BLACKSMITHING});
                     break;
                 case SKILL_ENCHANTING:
-                    player->learnSpell(SPELL_APPRENTICE_ENCHANTING);
-                    player->learnSpell(SPELL_JOURNEYMAN_ENCHANTING);
-                    player->learnSpell(SPELL_EXPERT_ENCHANTING);
-                    player->learnSpell(SPELL_ARTISAN_ENCHANTING);
-                    player->learnSpell(SPELL_MASTER_ENCHANTING);
-                    player->learnSpell(SPELL_GRAND_MASTER_ENCHANTING);
+                    LearnSpells(player, {
+                        SPELL_APPRENTICE_ENCHANTING, 
+                        SPELL_JOURNEYMAN_ENCHANTING, 
+                        SPELL_EXPERT_ENCHANTING, 
+                        SPELL_ARTISAN_ENCHANTING, 
+                        SPELL_MASTER_ENCHANTING, 
+                        SPELL_GRAND_MASTER_ENCHANTING});
                     break;
                 case SKILL_ENGINEERING:
-                    player->learnSpell(SPELL_APPRENTICE_ENGINEERING);
-                    player->learnSpell(SPELL_JOURNEYMAN_ENGINEERING);
-                    player->learnSpell(SPELL_EXPERT_ENGINEERING);
-                    player->learnSpell(SPELL_ARTISAN_ENGINEERING);
-                    player->learnSpell(SPELL_MASTER_ENGINEERING);
-                    player->learnSpell(SPELL_GRAND_MASTER_ENGINEERING);
+                    LearnSpells(player, {
+                        SPELL_APPRENTICE_ENGINEERING, 
+                        SPELL_JOURNEYMAN_ENGINEERING, 
+                        SPELL_EXPERT_ENGINEERING, 
+                        SPELL_ARTISAN_ENGINEERING, 
+                        SPELL_MASTER_ENGINEERING, 
+                        SPELL_GRAND_MASTER_ENGINEERING});
                     break;
                 case SKILL_INSCRIPTION:
-                    player->learnSpell(SPELL_APPRENTICE_INSCRIPTION);
-                    player->learnSpell(SPELL_JOURNEYMAN_INSCRIPTION);
-                    player->learnSpell(SPELL_EXPERT_INSCRIPTION);
-                    player->learnSpell(SPELL_ARTISAN_INSCRIPTION);
-                    player->learnSpell(SPELL_MASTER_INSCRIPTION);
-                    player->learnSpell(SPELL_GRAND_MASTER_INSCRIPTION);
+                    LearnSpells(player, {
+                        SPELL_APPRENTICE_INSCRIPTION, 
+                        SPELL_JOURNEYMAN_INSCRIPTION, 
+                        SPELL_EXPERT_INSCRIPTION, 
+                        SPELL_ARTISAN_INSCRIPTION, 
+                        SPELL_MASTER_INSCRIPTION, 
+                        SPELL_GRAND_MASTER_INSCRIPTION});
                     break;
                 case SKILL_JEWELCRAFTING:
-                    player->learnSpell(SPELL_APPRENTICE_JEWELCRAFTING);
-                    player->learnSpell(SPELL_JOURNEYMAN_JEWELCRAFTING);
-                    player->learnSpell(SPELL_EXPERT_JEWELCRAFTING);
-                    player->learnSpell(SPELL_ARTISAN_JEWELCRAFTING);
-                    player->learnSpell(SPELL_MASTER_JEWELCRAFTING);
-                    player->learnSpell(SPELL_GRAND_MASTER_JEWELCRAFTING);
+                    LearnSpells(player, {
+                        SPELL_APPRENTICE_JEWELCRAFTING, 
+                        SPELL_JOURNEYMAN_JEWELCRAFTING, 
+                        SPELL_EXPERT_JEWELCRAFTING, 
+                        SPELL_ARTISAN_JEWELCRAFTING, 
+                        SPELL_MASTER_JEWELCRAFTING, 
+                        SPELL_GRAND_MASTER_JEWELCRAFTING});
                     break;
                 case SKILL_LEATHERWORKING:
-                    player->learnSpell(SPELL_APPRENTICE_LEATHERWORKING);
-                    player->learnSpell(SPELL_JOURNEYMAN_LEATHERWORKING);
-                    player->learnSpell(SPELL_EXPERT_LEATHERWORKING);
-                    player->learnSpell(SPELL_ARTISAN_LEATHERWORKING);
-                    player->learnSpell(SPELL_MASTER_LEATHERWORKING);
-                    player->learnSpell(SPELL_GRAND_MASTER_LEATHERWORKING);
+                    LearnSpells(player, {
+                        SPELL_APPRENTICE_LEATHERWORKING, 
+                        SPELL_JOURNEYMAN_LEATHERWORKING, 
+                        SPELL_EXPERT_LEATHERWORKING, 
+                        SPELL_ARTISAN_LEATHERWORKING, 
+                        SPELL_MASTER_LEATHERWORKING, 
+                        SPELL_GRAND_MASTER_LEATHERWORKING});
                     break;
                 case SKILL_TAILORING:
-                    player->learnSpell(SPELL_APPRENTICE_TAILORING);
-                    player->learnSpell(SPELL_JOURNEYMAN_TAILORING);
-                    player->learnSpell(SPELL_EXPERT_TAILORING);
-                    player->learnSpell(SPELL_ARTISAN_TAILORING);
-                    player->learnSpell(SPELL_MASTER_TAILORING);
-                    player->learnSpell(SPELL_GRAND_MASTER_TAILORING);
+                    LearnSpells(player, {
+                        SPELL_APPRENTICE_TAILORING, 
+                        SPELL_JOURNEYMAN_TAILORING, 
+                        SPELL_EXPERT_TAILORING, 
+                        SPELL_ARTISAN_TAILORING, 
+                        SPELL_MASTER_TAILORING, 
+                        SPELL_GRAND_MASTER_TAILORING});
                     break;
                 case SKILL_COOKING:
-                    player->learnSpell(SPELL_APPRENTICE_COOKING);
-                    player->learnSpell(SPELL_JOURNEYMAN_COOKING);
-                    player->learnSpell(SPELL_EXPERT_COOKING);
-                    player->learnSpell(SPELL_ARTISAN_COOKING);
-                    player->learnSpell(SPELL_MASTER_COOKING);
-                    player->learnSpell(SPELL_GRAND_MASTER_COOKING);
+                    LearnSpells(player, {
+                        SPELL_APPRENTICE_COOKING, 
+                        SPELL_JOURNEYMAN_COOKING, 
+                        SPELL_EXPERT_COOKING, 
+                        SPELL_ARTISAN_COOKING, 
+                        SPELL_MASTER_COOKING, 
+                        SPELL_GRAND_MASTER_COOKING});
                     break;
                 case SKILL_FIRST_AID:
-                    player->learnSpell(SPELL_APPRENTICE_FIRST_AID);
-                    player->learnSpell(SPELL_JOURNEYMAN_FIRST_AID);
-                    player->learnSpell(SPELL_EXPERT_FIRST_AID);
-                    player->learnSpell(SPELL_ARTISAN_FIRST_AID);
-                    player->learnSpell(SPELL_MASTER_FIRST_AID);
-                    player->learnSpell(SPELL_GRAND_MASTER_FIRST_AID);
+                    LearnSpells(player, {
+                        SPELL_APPRENTICE_FIRST_AID, 
+                        SPELL_JOURNEYMAN_FIRST_AID, 
+                        SPELL_EXPERT_FIRST_AID, 
+                        SPELL_ARTISAN_FIRST_AID, 
+                        SPELL_MASTER_FIRST_AID, 
+                        SPELL_GRAND_MASTER_FIRST_AID});
                     break;
                 case SKILL_FISHING:
-                    player->learnSpell(SPELL_APPRENTICE_FISHING);
-                    player->learnSpell(SPELL_JOURNEYMAN_FISHING);
-                    player->learnSpell(SPELL_EXPERT_FISHING);
-                    player->learnSpell(SPELL_ARTISAN_FISHING);
-                    player->learnSpell(SPELL_MASTER_FISHING);
-                    player->learnSpell(SPELL_GRAND_MASTER_FISHING);
+                    LearnSpells(player, {
+                        SPELL_APPRENTICE_FISHING, 
+                        SPELL_JOURNEYMAN_FISHING, 
+                        SPELL_EXPERT_FISHING, 
+                        SPELL_ARTISAN_FISHING, 
+                        SPELL_MASTER_FISHING, 
+                        SPELL_GRAND_MASTER_FISHING});
                     break;
                 case SKILL_MINING:
-                    player->learnSpell(SPELL_APPRENTICE_MINING);
-                    player->learnSpell(SPELL_JOURNEYMAN_MINING);
-                    player->learnSpell(SPELL_EXPERT_MINING);
-                    player->learnSpell(SPELL_ARTISAN_MINING);
-                    player->learnSpell(SPELL_MASTER_MINING);
-                    player->learnSpell(SPELL_GRAND_MASTER_MINING);
+                    LearnSpells(player, {
+                        SPELL_APPRENTICE_MINING, 
+                        SPELL_JOURNEYMAN_MINING, 
+                        SPELL_EXPERT_MINING, 
+                        SPELL_ARTISAN_MINING, 
+                        SPELL_MASTER_MINING, 
+                        SPELL_GRAND_MASTER_MINING});
                     break;
                 case SKILL_SKINNING:
-                    player->learnSpell(SPELL_APPRENTICE_SKINNING);
-                    player->learnSpell(SPELL_JOURNEYMAN_SKINNING);
-                    player->learnSpell(SPELL_EXPERT_SKINNING);
-                    player->learnSpell(SPELL_ARTISAN_SKINNING);
-                    player->learnSpell(SPELL_MASTER_SKINNING);
-                    player->learnSpell(SPELL_GRAND_MASTER_SKINNING);
+                    LearnSpells(player, {
+                        SPELL_APPRENTICE_SKINNING, 
+                        SPELL_JOURNEYMAN_SKINNING, 
+                        SPELL_EXPERT_SKINNING, 
+                        SPELL_ARTISAN_SKINNING, 
+                        SPELL_MASTER_SKINNING, 
+                        SPELL_GRAND_MASTER_SKINNING});
                     break;
                 case SKILL_HERBALISM:
-                    player->learnSpell(SPELL_APPRENTICE_HERBALISM);
-                    player->learnSpell(SPELL_JOURNEYMAN_HERBALISM);
-                    player->learnSpell(SPELL_EXPERT_HERBALISM);
-                    player->learnSpell(SPELL_ARTISAN_HERBALISM);
-                    player->learnSpell(SPELL_MASTER_HERBALISM);
-                    player->learnSpell(SPELL_GRAND_MASTER_HERBALISM);
+                    LearnSpells(player, {
+                        SPELL_APPRENTICE_HERBALISM, 
+                        SPELL_JOURNEYMAN_HERBALISM, 
+                        SPELL_EXPERT_HERBALISM, 
+                        SPELL_ARTISAN_HERBALISM, 
+                        SPELL_MASTER_HERBALISM, 
+                        SPELL_GRAND_MASTER_HERBALISM});
                     break;
                 default:
                     break;
@@ -296,6 +310,11 @@ public:
         if (enabled) {
             AddGossipItemFor(player, GOSSIP_ICON_TRAINER, name, GOSSIP_SENDER_MAIN, skill);
         }
+    }
+
+    static void LearnSpells(Player* player, std::initializer_list<uint32> spellIds) {
+        for (uint32 spellId : spellIds)
+        player->learnSpell(spellId);
     }
 };
 
