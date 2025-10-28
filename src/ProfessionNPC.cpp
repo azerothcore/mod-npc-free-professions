@@ -261,7 +261,7 @@ public:
 
                         SpellInfo const *SpellInfo2 = sSpellMgr->GetSpellInfo(SkillLine->Spell);
 
-                        if (!SpellInfo2 || !SpellMgr::IsSpellValid(SpellInfo2) || SpellInfo2->Id == 62734)
+                        if (!SpellInfo2 || !SpellMgr::IsSpellValid(SpellInfo2) || SpellInfo2->Id == SPELL_APPRENTICE_FISHING_DUPLICATE)
                             continue;
 
                         player->learnSpell(SkillLine->Spell);
