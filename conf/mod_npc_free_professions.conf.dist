@@ -27,6 +27,22 @@ NpcFreeProfessions.Enable = 1
 NpcFreeProfessions.GivenCraftLevel = 450
 
 #
+#   NpcFreeProfessions.CostItemId
+#       Description: Item ID required to pay for learning a profession.
+#       Default:    29736 - Arcane Rune
+#
+
+NpcFreeProfessions.CostItemId = 29736
+
+#
+#   NpcFreeProfessions.CostItemAmount
+#       Description: Amount of CostItemId consumed per profession learned.
+#       Default:    500
+#
+
+NpcFreeProfessions.CostItemAmount = 500
+
+#
 #   NpcFreeProfessions.Enable.EachProfession
 #       Description: Enable/Disable each profession
 #       Default:    1 - Enabled, default
