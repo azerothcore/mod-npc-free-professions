@@ -8,8 +8,14 @@
 // From SC
 void AddSC_Professions();
 
-// Add all
-void Addmod_npc_free_professionsScripts()
+// Add all (module entrypoint expected by scriptloader)
+void Addmod_npc_free_professions_vipScripts()
 {
     AddSC_Professions();
+}
+
+// Backward-compatible alias for older naming.
+void Addmod_npc_free_professionsScripts()
+{
+    Addmod_npc_free_professions_vipScripts();
 }
