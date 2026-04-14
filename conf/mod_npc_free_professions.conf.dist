@@ -43,6 +43,15 @@ NpcFreeProfessions.CostItemId = 29736
 NpcFreeProfessions.CostItemAmount = 500
 
 #
+#   NpcFreeProfessions.PremiumBypass
+#       Description: If enabled, accounts with active=1 in table `premium` do not pay CostItemId/CostItemAmount.
+#       Default:    1 - Premium accounts learn professions without item cost
+#                   0 - Everyone pays (same cost for all)
+#
+
+NpcFreeProfessions.PremiumBypass = 1
+
+#
 #   NpcFreeProfessions.Enable.EachProfession
 #       Description: Enable/Disable each profession
 #       Default:    1 - Enabled, default

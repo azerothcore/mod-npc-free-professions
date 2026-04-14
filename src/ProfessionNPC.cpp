@@ -1,9 +1,11 @@
 #include "ProfessionNPC.h"
+#include "DatabaseEnv.h"
 
 bool ModConfigEnable = 1;
 uint16 ModConfigGivenCraftLevel = 450;
 uint32 ModConfigCostItemId = 29736;
 uint32 ModConfigCostItemAmount = 500;
+bool ModConfigPremiumBypass = true;
 bool ModConfigEnableAlchemy = 1;
 bool ModConfigEnableBlacksmithing = 1;
 bool ModConfigEnableLeatherworking = 1;
@@ -35,6 +37,7 @@ public:
         ModConfigGivenCraftLevel = sConfigMgr->GetOption<uint16>("NpcFreeProfessions.GivenCraftLevel", 450);
         ModConfigCostItemId = sConfigMgr->GetOption<uint32>("NpcFreeProfessions.CostItemId", 29736);
         ModConfigCostItemAmount = sConfigMgr->GetOption<uint32>("NpcFreeProfessions.CostItemAmount", 500);
+        ModConfigPremiumBypass = sConfigMgr->GetOption<bool>("NpcFreeProfessions.PremiumBypass", true);
         ModConfigEnableAlchemy = sConfigMgr->GetOption<bool>("NpcFreeProfessions.Enable.Alchemy", 1);
         ModConfigEnableBlacksmithing = sConfigMgr->GetOption<bool>("NpcFreeProfessions.Enable.Blacksmithing", 1);
         ModConfigEnableLeatherworking = sConfigMgr->GetOption<bool>("NpcFreeProfessions.Enable.Leatherworking", 1);
@@ -96,15 +99,22 @@ public:
                 }
                 else
                 {
-                    if (!player->HasItemCount(ModConfigCostItemId, ModConfigCostItemAmount, false))
+                    bool const premium = ModConfigPremiumBypass && IsPremiumAccount(player);
+                    bool const mustPay = !premium && ModConfigCostItemAmount > 0;
+
+                    if (mustPay)
                     {
-                        ChatHandler(player->GetSession()).PSendSysMessage("Necesitas %u de la runa (item %u) para aprender esta profesion.",
-                            ModConfigCostItemAmount, ModConfigCostItemId);
-                        CloseGossipMenuFor(player);
-                        return true;
+                        if (!player->HasItemCount(ModConfigCostItemId, ModConfigCostItemAmount, false))
+                        {
+                            ChatHandler(player->GetSession()).PSendSysMessage("Necesitas %u de la runa (item %u) para aprender esta profesion.",
+                                ModConfigCostItemAmount, ModConfigCostItemId);
+                            CloseGossipMenuFor(player);
+                            return true;
+                        }
+
+                        player->DestroyItemCount(ModConfigCostItemId, ModConfigCostItemAmount, true);
                     }
 
-                    player->DestroyItemCount(ModConfigCostItemId, ModConfigCostItemAmount, true);
                     LearnAllRecipesInProfession(player, (SkillType)SKILL);
                     CloseGossipMenuFor(player);
                 }
@@ -112,6 +122,14 @@ public:
         }
 
         return true;
+    }
+
+    static bool IsPremiumAccount(Player const* player)
+    {
+        QueryResult result = CharacterDatabase.Query(
+            "SELECT 1 FROM `premium` WHERE `active` = 1 AND `AccountId` = {}",
+            player->GetSession()->GetAccountId());
+        return static_cast<bool>(result);
     }
 
     static void LearnAllRecipesInProfession(Player *player, SkillType skill)
