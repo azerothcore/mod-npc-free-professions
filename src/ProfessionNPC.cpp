@@ -1,5 +1,8 @@
 #include "ProfessionNPC.h"
 #include "DatabaseEnv.h"
+#include "ObjectMgr.h"
+#include <sstream>
+#include <string>
 
 bool ModConfigEnable = 1;
 uint16 ModConfigGivenCraftLevel = 450;
@@ -20,6 +23,14 @@ bool ModConfigEnableMining = 1;
 bool ModConfigEnableCooking = 1;
 bool ModConfigEnableFirstAid = 1;
 bool ModConfigEnableFishing = 1;
+std::string ModConfigCostItemDisplayName;
+std::string ModConfigPremiumSubscriptionUrl;
+
+namespace
+{
+uint32 constexpr GOSSIP_ACTION_COST_INFO = 0xE0000001;
+uint32 constexpr GOSSIP_ACTION_BACK = 0xE0000002;
+}
 
 class NpcFreeProfessionsConfig : public WorldScript
 {
@@ -52,6 +63,9 @@ public:
         ModConfigEnableCooking = sConfigMgr->GetOption<bool>("NpcFreeProfessions.Enable.Cooking", 1);
         ModConfigEnableFirstAid = sConfigMgr->GetOption<bool>("NpcFreeProfessions.Enable.FirstAid", 1);
         ModConfigEnableFishing = sConfigMgr->GetOption<bool>("NpcFreeProfessions.Enable.Fishing", 1);
+        ModConfigCostItemDisplayName = sConfigMgr->GetOption<std::string>("NpcFreeProfessions.CostItemDisplayName", "");
+        ModConfigPremiumSubscriptionUrl = sConfigMgr->GetOption<std::string>(
+            "NpcFreeProfessions.PremiumSubscriptionUrl", "https://www.wowlibre.com/subscription");
     }
 };
 
@@ -60,31 +74,93 @@ class NpcFreeProfessionsCreatureScript : public CreatureScript
 public:
     NpcFreeProfessionsCreatureScript() : CreatureScript("npc_free_professions") {}
 
+    static std::string ResolveCostItemDisplayName()
+    {
+        if (!ModConfigCostItemDisplayName.empty())
+            return ModConfigCostItemDisplayName;
+
+        if (ItemTemplate const* it = sObjectMgr->GetItemTemplate(ModConfigCostItemId))
+            return std::string(it->Name1);
+
+        return std::to_string(ModConfigCostItemId);
+    }
+
+    static void SendMainProfessionGossipMenu(Player* player, Creature* creature)
+    {
+        player->PlayerTalkClass->ClearMenus();
+
+        bool const premium = ModConfigPremiumBypass && IsPremiumAccount(player);
+        bool const mustPay = !premium && ModConfigCostItemAmount > 0;
+
+        if (ModConfigCostItemAmount > 0 && ModConfigPremiumBypass && premium)
+        {
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "[VIP] Cuenta premium: sin costo en tokens", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_COST_INFO);
+        }
+        else if (mustPay)
+        {
+            uint32 const have = player->GetItemCount(ModConfigCostItemId, false);
+            std::ostringstream ss;
+            ss << "Costo (no premium): " << ModConfigCostItemAmount << " " << ResolveCostItemDisplayName()
+               << " | Tienes: " << have << " [Detalles]";
+            AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, ss.str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_COST_INFO);
+        }
+
+        AddGossipItemForProfession(ModConfigEnableAlchemy, player, "Alchemy", SKILL_ALCHEMY);
+        AddGossipItemForProfession(ModConfigEnableBlacksmithing, player, "Blacksmithing", SKILL_BLACKSMITHING);
+        AddGossipItemForProfession(ModConfigEnableLeatherworking, player, "Leatherworking", SKILL_LEATHERWORKING);
+        AddGossipItemForProfession(ModConfigEnableTailoring, player, "Tailoring", SKILL_TAILORING);
+        AddGossipItemForProfession(ModConfigEnableEngineering, player, "Engineering", SKILL_ENGINEERING);
+        AddGossipItemForProfession(ModConfigEnableEnchanting, player, "Enchanting", SKILL_ENCHANTING);
+        AddGossipItemForProfession(ModConfigEnableJewelcrafting, player, "Jewelcrafting", SKILL_JEWELCRAFTING);
+        AddGossipItemForProfession(ModConfigEnableInscription, player, "Inscription", SKILL_INSCRIPTION);
+        AddGossipItemForProfession(ModConfigEnableHerbalism, player, "Herbalism", SKILL_HERBALISM);
+        AddGossipItemForProfession(ModConfigEnableSkinning, player, "Skinning", SKILL_SKINNING);
+        AddGossipItemForProfession(ModConfigEnableMining, player, "Mining", SKILL_MINING);
+        AddGossipItemForProfession(ModConfigEnableCooking, player, "Cooking", SKILL_COOKING);
+        AddGossipItemForProfession(ModConfigEnableFirstAid, player, "First Aid", SKILL_FIRST_AID);
+        AddGossipItemForProfession(ModConfigEnableFishing, player, "Fishing", SKILL_FISHING);
+        SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature);
+    }
+
+    static void SendCostInfoGossip(Player* player, Creature* creature)
+    {
+        ChatHandler ch(player->GetSession());
+        bool const premium = ModConfigPremiumBypass && IsPremiumAccount(player);
+
+        if (ModConfigCostItemAmount == 0)
+            ch.PSendSysMessage("Las profesiones no tienen costo de tokens.");
+        else if (ModConfigPremiumBypass && premium)
+            ch.PSendSysMessage("Tu cuenta tiene estado premium: aprender una profesion no consume tokens.");
+        else
+        {
+            uint32 const have = player->GetItemCount(ModConfigCostItemId, false);
+            std::string const itemName = ResolveCostItemDisplayName();
+
+            ch.PSendSysMessage("Si no eres premium, cada profesion cuesta %u %s (item id %u).",
+                ModConfigCostItemAmount, itemName.c_str(), ModConfigCostItemId);
+            ch.PSendSysMessage("En el inventario llevas: %u.", have);
+            if (have < ModConfigCostItemAmount)
+                ch.PSendSysMessage("Te faltan %u %s para poder aprender otra profesion.",
+                    ModConfigCostItemAmount - have, itemName.c_str());
+
+            if (!ModConfigPremiumSubscriptionUrl.empty())
+                ch.PSendSysMessage("Donde suscribirte a VIP (sin este costo por profesion): %s",
+                    ModConfigPremiumSubscriptionUrl.c_str());
+        }
+
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Volver al menu de profesiones", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_BACK);
+        SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature);
+    }
+
     bool OnGossipHello(Player *player, Creature *creature) override
     {
         if (ModConfigEnable)
-        {
-            AddGossipItemForProfession(ModConfigEnableAlchemy, player, "Alchemy", SKILL_ALCHEMY);
-            AddGossipItemForProfession(ModConfigEnableBlacksmithing, player, "Blacksmithing", SKILL_BLACKSMITHING);
-            AddGossipItemForProfession(ModConfigEnableLeatherworking, player, "Leatherworking", SKILL_LEATHERWORKING);
-            AddGossipItemForProfession(ModConfigEnableTailoring, player, "Tailoring", SKILL_TAILORING);
-            AddGossipItemForProfession(ModConfigEnableEngineering, player, "Engineering", SKILL_ENGINEERING);
-            AddGossipItemForProfession(ModConfigEnableEnchanting, player, "Enchanting", SKILL_ENCHANTING);
-            AddGossipItemForProfession(ModConfigEnableJewelcrafting, player, "Jewelcrafting", SKILL_JEWELCRAFTING);
-            AddGossipItemForProfession(ModConfigEnableInscription, player, "Inscription", SKILL_INSCRIPTION);
-            AddGossipItemForProfession(ModConfigEnableHerbalism, player, "Herbalism", SKILL_HERBALISM);
-            AddGossipItemForProfession(ModConfigEnableSkinning, player, "Skinning", SKILL_SKINNING);
-            AddGossipItemForProfession(ModConfigEnableMining, player, "Mining", SKILL_MINING);
-            AddGossipItemForProfession(ModConfigEnableCooking, player, "Cooking", SKILL_COOKING);
-            AddGossipItemForProfession(ModConfigEnableFirstAid, player, "First Aid", SKILL_FIRST_AID);
-            AddGossipItemForProfession(ModConfigEnableFishing, player, "Fishing", SKILL_FISHING);
-            SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature);
-        }
+            SendMainProfessionGossipMenu(player, creature);
 
         return true;
     }
 
-    bool OnGossipSelect(Player *player, Creature */*creature*/, uint32 Sender, uint32 SKILL) override
+    bool OnGossipSelect(Player *player, Creature *creature, uint32 Sender, uint32 SKILL) override
     {
         if (ModConfigEnable)
         {
@@ -92,6 +168,18 @@ public:
 
             if (Sender == GOSSIP_SENDER_MAIN)
             {
+                if (SKILL == GOSSIP_ACTION_COST_INFO)
+                {
+                    SendCostInfoGossip(player, creature);
+                    return true;
+                }
+
+                if (SKILL == GOSSIP_ACTION_BACK)
+                {
+                    SendMainProfessionGossipMenu(player, creature);
+                    return true;
+                }
+
                 if (player->HasSkill(SKILL))
                 {
                     ChatHandler(player->GetSession()).SendNotification("You already have this work!");
