@@ -128,24 +128,39 @@ public:
         bool const premium = ModConfigPremiumBypass && IsPremiumAccount(player);
 
         if (ModConfigCostItemAmount == 0)
-            ch.PSendSysMessage("Las profesiones no tienen costo de tokens.");
+            ch.SendSysMessage("Las profesiones no tienen costo de tokens.");
         else if (ModConfigPremiumBypass && premium)
-            ch.PSendSysMessage("Tu cuenta tiene estado premium: aprender una profesion no consume tokens.");
+            ch.SendSysMessage("Tu cuenta tiene estado premium: aprender una profesion no consume tokens.");
         else
         {
             uint32 const have = player->GetItemCount(ModConfigCostItemId, false);
             std::string const itemName = ResolveCostItemDisplayName();
 
-            ch.PSendSysMessage("Si no eres premium, cada profesion cuesta %u %s (item id %u).",
-                ModConfigCostItemAmount, itemName.c_str(), ModConfigCostItemId);
-            ch.PSendSysMessage("En el inventario llevas: %u.", have);
+            {
+                std::ostringstream line;
+                line << "Si no eres premium, cada profesion cuesta " << ModConfigCostItemAmount << " " << itemName
+                     << " (item id " << ModConfigCostItemId << ").";
+                ch.SendSysMessage(line.str().c_str());
+            }
+            {
+                std::ostringstream line;
+                line << "En el inventario llevas: " << have << ".";
+                ch.SendSysMessage(line.str().c_str());
+            }
             if (have < ModConfigCostItemAmount)
-                ch.PSendSysMessage("Te faltan %u %s para poder aprender otra profesion.",
-                    ModConfigCostItemAmount - have, itemName.c_str());
+            {
+                std::ostringstream line;
+                line << "Te faltan " << (ModConfigCostItemAmount - have) << " " << itemName
+                     << " para poder aprender otra profesion.";
+                ch.SendSysMessage(line.str().c_str());
+            }
 
             if (!ModConfigPremiumSubscriptionUrl.empty())
-                ch.PSendSysMessage("Donde suscribirte a VIP (sin este costo por profesion): %s",
-                    ModConfigPremiumSubscriptionUrl.c_str());
+            {
+                std::ostringstream line;
+                line << "Donde suscribirte a VIP (sin este costo por profesion): " << ModConfigPremiumSubscriptionUrl;
+                ch.SendSysMessage(line.str().c_str());
+            }
         }
 
         AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Volver al menu de profesiones", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_BACK);
@@ -194,8 +209,12 @@ public:
                     {
                         if (!player->HasItemCount(ModConfigCostItemId, ModConfigCostItemAmount, false))
                         {
-                            ChatHandler(player->GetSession()).PSendSysMessage("Necesitas %u de la runa (item %u) para aprender esta profesion.",
-                                ModConfigCostItemAmount, ModConfigCostItemId);
+                            {
+                                std::ostringstream line;
+                                line << "Necesitas " << ModConfigCostItemAmount << " de la runa (item " << ModConfigCostItemId
+                                     << ") para aprender esta profesion.";
+                                ChatHandler(player->GetSession()).SendSysMessage(line.str().c_str());
+                            }
                             CloseGossipMenuFor(player);
                             return true;
                         }
