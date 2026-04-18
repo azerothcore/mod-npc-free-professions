@@ -27,6 +27,49 @@ NpcFreeProfessions.Enable = 1
 NpcFreeProfessions.GivenCraftLevel = 450
 
 #
+#   NpcFreeProfessions.CostItemId
+#       Description: Item ID required to pay for learning a profession.
+#       Default:    29736 - Arcane Rune
+#
+
+NpcFreeProfessions.CostItemId = 29736
+
+#
+#   NpcFreeProfessions.CostItemAmount
+#       Description: Amount of CostItemId consumed per profession learned.
+#       Default:    500
+#
+
+NpcFreeProfessions.CostItemAmount = 500
+
+#
+#   NpcFreeProfessions.CostItemDisplayName
+#       Description: Label shown in NPC gossip and cost details for the payment item.
+#                    If empty, the item name from game data (DBC) is used for CostItemId, or the item id as fallback.
+#       Default:    (empty) - auto from item template
+#       Example:    Runa arcana
+#
+#   Uncomment to set a custom label (otherwise the DBC item name for CostItemId is used):
+# NpcFreeProfessions.CostItemDisplayName = Runa arcana
+
+#
+#   NpcFreeProfessions.PremiumSubscriptionUrl
+#       Description: Web page shown to non-VIP players in the cost details so they know where to buy VIP (premium bypass).
+#       Default:    https://www.wowlibre.com/subscription
+#
+
+NpcFreeProfessions.PremiumSubscriptionUrl = https://www.wowlibre.com/subscription
+
+#
+#   NpcFreeProfessions.PremiumBypass
+#       Description: If enabled, accounts with active=1 in table `premium` do not pay CostItemId/CostItemAmount.
+#       Default:    1 - Premium accounts learn professions without item cost
+#                   0 - Everyone pays (same cost for all)
+#
+
+NpcFreeProfessions.PremiumBypass = 1
+
+#
 #   NpcFreeProfessions.Enable.EachProfession
 #       Description: Enable/Disable each profession
 #       Default:    1 - Enabled, default
