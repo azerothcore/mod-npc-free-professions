@@ -14,17 +14,24 @@
 NpcFreeProfessions.Enable = 1
 
 #
-#   NpcFreeProfessions.GivenCraftLevel
-#       Description: The skill level given for a profession
-#       Default:    450 - default
-#                   375
-#                   300
-#                   225
-#                   150
-#                    75
+#   NpcFreeProfessions.EachProfessionRankCharacterLevelRequirement
+#       Description: The minimum character level required to unlock each profession rank.
+#                    Unlocking a rank automatically raises the profession skill to its maximum level:
+#                    Apprentice = 75
+#                    Journeyman = 150
+#                    Expert = 225
+#                    Artisan = 300
+#                    Master = 375
+#                    Grand Master = 450
+#       Default:    1 - default
 #
 
-NpcFreeProfessions.GivenCraftLevel = 450
+NpcFreeProfessions.ApprenticeRankCharacterLevelRequirement = 1
+NpcFreeProfessions.JourneymanRankCharacterLevelRequirement = 1
+NpcFreeProfessions.ExpertRankCharacterLevelRequirement = 1
+NpcFreeProfessions.ArtisanRankCharacterLevelRequirement = 1
+NpcFreeProfessions.MasterRankCharacterLevelRequirement = 1
+NpcFreeProfessions.GrandMasterRankCharacterLevelRequirement = 1
 
 #
 #   NpcFreeProfessions.Enable.EachProfession

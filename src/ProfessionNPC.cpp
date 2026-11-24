@@ -1,7 +1,12 @@
 #include "ProfessionNPC.h"
 
 bool ModConfigEnable = 1;
-uint16 ModConfigGivenCraftLevel = 450;
+uint16 ModConfigApprenticeRankCharacterLevelRequirement = 1;
+uint16 ModConfigJourneymanRankCharacterLevelRequirement = 15;
+uint16 ModConfigExpertRankCharacterLevelRequirement = 30;
+uint16 ModConfigArtisanRankCharacterLevelRequirement = 45;
+uint16 ModConfigMasterRankCharacterLevelRequirement = 60;
+uint16 ModConfigGrandMasterRankCharacterLevelRequirement = 70;
 bool ModConfigEnableAlchemy = 1;
 bool ModConfigEnableBlacksmithing = 1;
 bool ModConfigEnableLeatherworking = 1;
@@ -30,7 +35,12 @@ public:
     void SetInitialWorldSettings()
     {
         ModConfigEnable = sConfigMgr->GetOption<bool>("NpcFreeProfessions.Enable", 1);
-        ModConfigGivenCraftLevel = sConfigMgr->GetOption<uint16>("NpcFreeProfessions.GivenCraftLevel", 450);
+        ModConfigApprenticeRankCharacterLevelRequirement = sConfigMgr->GetOption<uint16>("NpcFreeProfessions.ApprenticeRankCharacterLevelRequirement", 1);
+        ModConfigJourneymanRankCharacterLevelRequirement = sConfigMgr->GetOption<uint16>("NpcFreeProfessions.JourneymanRankCharacterLevelRequirement", 15);
+        ModConfigExpertRankCharacterLevelRequirement = sConfigMgr->GetOption<uint16>("NpcFreeProfessions.ExpertRankCharacterLevelRequirement", 30);
+        ModConfigArtisanRankCharacterLevelRequirement = sConfigMgr->GetOption<uint16>("NpcFreeProfessions.ArtisanRankCharacterLevelRequirement", 45);
+        ModConfigMasterRankCharacterLevelRequirement = sConfigMgr->GetOption<uint16>("NpcFreeProfessions.MasterRankCharacterLevelRequirement", 60);
+        ModConfigGrandMasterRankCharacterLevelRequirement = sConfigMgr->GetOption<uint16>("NpcFreeProfessions.GrandMasterRankCharacterLevelRequirement", 70);
         ModConfigEnableAlchemy = sConfigMgr->GetOption<bool>("NpcFreeProfessions.Enable.Alchemy", 1);
         ModConfigEnableBlacksmithing = sConfigMgr->GetOption<bool>("NpcFreeProfessions.Enable.Blacksmithing", 1);
         ModConfigEnableLeatherworking = sConfigMgr->GetOption<bool>("NpcFreeProfessions.Enable.Leatherworking", 1);
@@ -57,6 +67,29 @@ public:
     {
         if (ModConfigEnable)
         {
+            std::string message =
+                "I can teach you professions and help you advance through higher ranks as your character levels up. "
+                "Learning a new rank will also raise your profession skill to its maximum for that rank.|n|n"
+
+                "Apprentice (75) Requires Level " +
+                std::to_string(ModConfigApprenticeRankCharacterLevelRequirement) + "|n" +
+
+                "Journeyman (150) Requires Level " +
+                std::to_string(ModConfigJourneymanRankCharacterLevelRequirement) + "|n" +
+
+                "Expert (225) Requires Level " +
+                std::to_string(ModConfigExpertRankCharacterLevelRequirement) + "|n" +
+
+                "Artisan (300) Requires Level " +
+                std::to_string(ModConfigArtisanRankCharacterLevelRequirement) + "|n" +
+
+                "Master (375) Requires Level " +
+                std::to_string(ModConfigMasterRankCharacterLevelRequirement) + "|n" +
+
+                "Grand Master (450) Requires Level " +
+                std::to_string(ModConfigGrandMasterRankCharacterLevelRequirement);
+
+            GossipSetText(player, message, DEFAULT_GOSSIP_MESSAGE);
             AddGossipItemForProfession(ModConfigEnableAlchemy, player, "Alchemy", SKILL_ALCHEMY);
             AddGossipItemForProfession(ModConfigEnableBlacksmithing, player, "Blacksmithing", SKILL_BLACKSMITHING);
             AddGossipItemForProfession(ModConfigEnableLeatherworking, player, "Leatherworking", SKILL_LEATHERWORKING);
@@ -85,14 +118,8 @@ public:
 
             if (Sender == GOSSIP_SENDER_MAIN)
             {
-                if (player->HasSkill(SKILL))
-                {
-                    ChatHandler(player->GetSession()).SendNotification("You already have this work!");
-                    CloseGossipMenuFor(player);
-                }
-                else
-                {
-                    LearnAllRecipesInProfession(player, (SkillType)SKILL);
+                if (GetGivenCraftLevel(player) >= MAX_SKILL_LEVEL_APPRENTICE){
+                    LearnAllRecipesInProfession(player, GetGivenCraftLevel(player), (SkillType)SKILL);
                     CloseGossipMenuFor(player);
                 }
             }
@@ -101,14 +128,15 @@ public:
         return true;
     }
 
-    static void LearnAllRecipesInProfession(Player *player, SkillType skill)
+    static void LearnAllRecipesInProfession(Player *player, uint16 GivenCraftLevel, SkillType skill)
     {
         if (HasFreeProfession(player, skill))
         {
             switch (skill)
             {
                 case SKILL_ALCHEMY:
-                    LearnSpells(player, {
+                    LearnProfessionSpells(player, 
+                        GivenCraftLevel, {
                         SPELL_APPRENTICE_ALCHEMY, 
                         SPELL_JOURNEYMAN_ALCHEMY, 
                         SPELL_EXPERT_ALCHEMY, 
@@ -117,7 +145,8 @@ public:
                         SPELL_GRAND_MASTER_ALCHEMY});
                     break;
                 case SKILL_BLACKSMITHING:
-                    LearnSpells(player, {
+                    LearnProfessionSpells(player, 
+                        GivenCraftLevel, {
                         SPELL_APPRENTICE_BLACKSMITHING, 
                         SPELL_JOURNEYMAN_BLACKSMITHING, 
                         SPELL_EXPERT_BLACKSMITHING, 
@@ -126,7 +155,8 @@ public:
                         SPELL_GRAND_MASTER_BLACKSMITHING});
                     break;
                 case SKILL_ENCHANTING:
-                    LearnSpells(player, {
+                    LearnProfessionSpells(player, 
+                        GivenCraftLevel, {
                         SPELL_APPRENTICE_ENCHANTING, 
                         SPELL_JOURNEYMAN_ENCHANTING, 
                         SPELL_EXPERT_ENCHANTING, 
@@ -135,7 +165,8 @@ public:
                         SPELL_GRAND_MASTER_ENCHANTING});
                     break;
                 case SKILL_ENGINEERING:
-                    LearnSpells(player, {
+                    LearnProfessionSpells(player, 
+                        GivenCraftLevel, {
                         SPELL_APPRENTICE_ENGINEERING, 
                         SPELL_JOURNEYMAN_ENGINEERING, 
                         SPELL_EXPERT_ENGINEERING, 
@@ -144,7 +175,8 @@ public:
                         SPELL_GRAND_MASTER_ENGINEERING});
                     break;
                 case SKILL_INSCRIPTION:
-                    LearnSpells(player, {
+                    LearnProfessionSpells(player, 
+                        GivenCraftLevel, {
                         SPELL_APPRENTICE_INSCRIPTION, 
                         SPELL_JOURNEYMAN_INSCRIPTION, 
                         SPELL_EXPERT_INSCRIPTION, 
@@ -153,7 +185,8 @@ public:
                         SPELL_GRAND_MASTER_INSCRIPTION});
                     break;
                 case SKILL_JEWELCRAFTING:
-                    LearnSpells(player, {
+                    LearnProfessionSpells(player, 
+                        GivenCraftLevel, {
                         SPELL_APPRENTICE_JEWELCRAFTING, 
                         SPELL_JOURNEYMAN_JEWELCRAFTING, 
                         SPELL_EXPERT_JEWELCRAFTING, 
@@ -162,7 +195,8 @@ public:
                         SPELL_GRAND_MASTER_JEWELCRAFTING});
                     break;
                 case SKILL_LEATHERWORKING:
-                    LearnSpells(player, {
+                    LearnProfessionSpells(player, 
+                        GivenCraftLevel, {
                         SPELL_APPRENTICE_LEATHERWORKING, 
                         SPELL_JOURNEYMAN_LEATHERWORKING, 
                         SPELL_EXPERT_LEATHERWORKING, 
@@ -171,7 +205,8 @@ public:
                         SPELL_GRAND_MASTER_LEATHERWORKING});
                     break;
                 case SKILL_TAILORING:
-                    LearnSpells(player, {
+                    LearnProfessionSpells(player, 
+                        GivenCraftLevel, {
                         SPELL_APPRENTICE_TAILORING, 
                         SPELL_JOURNEYMAN_TAILORING, 
                         SPELL_EXPERT_TAILORING, 
@@ -180,7 +215,8 @@ public:
                         SPELL_GRAND_MASTER_TAILORING});
                     break;
                 case SKILL_COOKING:
-                    LearnSpells(player, {
+                    LearnProfessionSpells(player, 
+                        GivenCraftLevel, {
                         SPELL_APPRENTICE_COOKING, 
                         SPELL_JOURNEYMAN_COOKING, 
                         SPELL_EXPERT_COOKING, 
@@ -189,7 +225,8 @@ public:
                         SPELL_GRAND_MASTER_COOKING});
                     break;
                 case SKILL_FIRST_AID:
-                    LearnSpells(player, {
+                    LearnProfessionSpells(player, 
+                        GivenCraftLevel, {
                         SPELL_APPRENTICE_FIRST_AID, 
                         SPELL_JOURNEYMAN_FIRST_AID, 
                         SPELL_EXPERT_FIRST_AID, 
@@ -198,7 +235,8 @@ public:
                         SPELL_GRAND_MASTER_FIRST_AID});
                     break;
                 case SKILL_FISHING:
-                    LearnSpells(player, {
+                    LearnProfessionSpells(player, 
+                        GivenCraftLevel, {
                         SPELL_APPRENTICE_FISHING, 
                         SPELL_JOURNEYMAN_FISHING, 
                         SPELL_EXPERT_FISHING, 
@@ -207,7 +245,8 @@ public:
                         SPELL_GRAND_MASTER_FISHING});
                     break;
                 case SKILL_MINING:
-                    LearnSpells(player, {
+                    LearnProfessionSpells(player, 
+                        GivenCraftLevel, {
                         SPELL_APPRENTICE_MINING, 
                         SPELL_JOURNEYMAN_MINING, 
                         SPELL_EXPERT_MINING, 
@@ -216,7 +255,8 @@ public:
                         SPELL_GRAND_MASTER_MINING});
                     break;
                 case SKILL_SKINNING:
-                    LearnSpells(player, {
+                    LearnProfessionSpells(player, 
+                        GivenCraftLevel, {
                         SPELL_APPRENTICE_SKINNING, 
                         SPELL_JOURNEYMAN_SKINNING, 
                         SPELL_EXPERT_SKINNING, 
@@ -225,7 +265,8 @@ public:
                         SPELL_GRAND_MASTER_SKINNING});
                     break;
                 case SKILL_HERBALISM:
-                    LearnSpells(player, {
+                    LearnProfessionSpells(player, 
+                        GivenCraftLevel, {
                         SPELL_APPRENTICE_HERBALISM, 
                         SPELL_JOURNEYMAN_HERBALISM, 
                         SPELL_EXPERT_HERBALISM, 
@@ -239,7 +280,13 @@ public:
 
             if (SkillLineEntry const *SkillInfo = sSkillLineStore.LookupEntry(skill))
             {
-                player->SetSkill(SkillInfo->id, player->GetSkillStep(SkillInfo->id), ModConfigGivenCraftLevel, 450);
+                uint16 CurrentCraftLevel = player->GetSkillValue(SkillInfo->id);
+                uint16 CurrentMaxCraftLevel = player->GetMaxSkillValue(SkillInfo->id);
+
+                uint16 NewGivenCraftLevel = std::max(CurrentCraftLevel, GivenCraftLevel);
+                uint16 NewMaxCraftLevel = std::max(CurrentMaxCraftLevel, GivenCraftLevel);
+
+                player->SetSkill(SkillInfo->id, player->GetSkillStep(SkillInfo->id), NewGivenCraftLevel, NewMaxCraftLevel);
 
                 uint32 ClassMask = player->getClassMask();
                 
@@ -261,7 +308,25 @@ public:
 
                         SpellInfo const *SpellInfo2 = sSpellMgr->GetSpellInfo(SkillLine->Spell);
 
-                        if (!SpellInfo2 || !SpellMgr::IsSpellValid(SpellInfo2) || SpellInfo2->Id == SPELL_APPRENTICE_FISHING_DUPLICATE)
+                        if (!SpellInfo2 || !SpellMgr::IsSpellValid(SpellInfo2))
+                            continue;
+
+                        if(SpellInfo2->Id == SPELL_APPRENTICE_FISHING_DUPLICATE || 
+                            SpellInfo2->Id == SPELL_GRAND_MASTER_ALCHEMY || 
+                            SpellInfo2->Id == SPELL_GRAND_MASTER_BLACKSMITHING || 
+                            SpellInfo2->Id == SPELL_GRAND_MASTER_ENCHANTING || 
+                            SpellInfo2->Id == SPELL_GRAND_MASTER_ENGINEERING || 
+                            SpellInfo2->Id == SPELL_GRAND_MASTER_INSCRIPTION || 
+                            SpellInfo2->Id == SPELL_GRAND_MASTER_JEWELCRAFTING || 
+                            SpellInfo2->Id == SPELL_GRAND_MASTER_LEATHERWORKING || 
+                            SpellInfo2->Id == SPELL_GRAND_MASTER_TAILORING || 
+                            SpellInfo2->Id == SPELL_GRAND_MASTER_COOKING || 
+                            SpellInfo2->Id == SPELL_GRAND_MASTER_FIRST_AID || 
+                            SpellInfo2->Id == SPELL_GRAND_MASTER_FISHING || 
+                            SpellInfo2->Id == SPELL_GRAND_MASTER_MINING || 
+                            SpellInfo2->Id == SPELL_GRAND_MASTER_SKINNING || 
+                            SpellInfo2->Id == SPELL_GRAND_MASTER_HERBALISM
+                        )
                             continue;
 
                         player->learnSpell(SkillLine->Spell);
@@ -312,9 +377,58 @@ public:
         }
     }
 
-    static void LearnSpells(Player* player, std::initializer_list<uint32> spellIds) {
-        for (uint32 spellId : spellIds)
-        player->learnSpell(spellId);
+    static void LearnProfessionSpells(Player* player, uint16 GivenCraftLevel, std::initializer_list<uint32> spellIds) {
+        uint16 CraftLevelCount = 0;
+        for (uint32 spellId : spellIds){
+            if (CraftLevelCount >= GivenCraftLevel)
+                break;
+            player->learnSpell(spellId);
+            CraftLevelCount += MAX_SKILL_LEVEL_APPRENTICE;
+        }
+    }
+
+    static uint16 GetGivenCraftLevel(Player* player){
+        uint16 GivenCraftLevel = 0;
+        if (player->GetLevel() >= ModConfigGrandMasterRankCharacterLevelRequirement){
+            GivenCraftLevel = MAX_SKILL_LEVEL_GRAND_MASTER;
+        }else if (player->GetLevel() >= ModConfigMasterRankCharacterLevelRequirement){
+            GivenCraftLevel = MAX_SKILL_LEVEL_MASTER;
+        }else if (player->GetLevel() >= ModConfigArtisanRankCharacterLevelRequirement){
+            GivenCraftLevel = MAX_SKILL_LEVEL_ARTISAN;
+        }else if (player->GetLevel() >= ModConfigExpertRankCharacterLevelRequirement){
+            GivenCraftLevel = MAX_SKILL_LEVEL_EXPERT;
+        }else if (player->GetLevel() >= ModConfigJourneymanRankCharacterLevelRequirement){
+            GivenCraftLevel = MAX_SKILL_LEVEL_JOURNEYMAN;
+        }else if (player->GetLevel() >= ModConfigApprenticeRankCharacterLevelRequirement){
+            GivenCraftLevel = MAX_SKILL_LEVEL_APPRENTICE;
+        }
+        return GivenCraftLevel;
+    }
+
+    /*
+    * Originally from the GossipSetText() helper in mod-instance-reset.
+    * This method is used to override the npc_text
+    * Without resorting to the database, since it is a module.
+    * And we want to avoid adding information that is not blizzlike.
+    */
+    void GossipSetText(Player* player, std::string message, uint32 textID)
+    {
+        WorldPacket data(SMSG_NPC_TEXT_UPDATE, 100);
+        data << textID;
+        for (uint8 i = 0; i < MAX_GOSSIP_TEXT_OPTIONS; ++i)
+        {
+            data << float(0);
+            data << message;
+            data << message;
+            data << uint32(0);
+            data << uint32(0);
+            data << uint32(0);
+            data << uint32(0);
+            data << uint32(0);
+            data << uint32(0);
+            data << uint32(0);
+        }
+        player->GetSession()->SendPacket(&data);
     }
 };
 
