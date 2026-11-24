@@ -27,11 +27,11 @@ NpcFreeProfessions.Enable = 1
 #
 
 NpcFreeProfessions.ApprenticeRankCharacterLevelRequirement = 1
-NpcFreeProfessions.JourneymanRankCharacterLevelRequirement = 1
-NpcFreeProfessions.ExpertRankCharacterLevelRequirement = 1
-NpcFreeProfessions.ArtisanRankCharacterLevelRequirement = 1
-NpcFreeProfessions.MasterRankCharacterLevelRequirement = 1
-NpcFreeProfessions.GrandMasterRankCharacterLevelRequirement = 1
+NpcFreeProfessions.JourneymanRankCharacterLevelRequirement = 15
+NpcFreeProfessions.ExpertRankCharacterLevelRequirement = 30
+NpcFreeProfessions.ArtisanRankCharacterLevelRequirement = 45
+NpcFreeProfessions.MasterRankCharacterLevelRequirement = 60
+NpcFreeProfessions.GrandMasterRankCharacterLevelRequirement = 70
 
 #
 #   NpcFreeProfessions.Enable.EachProfession
