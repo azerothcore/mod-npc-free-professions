@@ -7,6 +7,20 @@
 #include "ScriptMgr.h"
 #include "SpellMgr.h"
 #include <Config.h>
+#include "GossipDef.h"
+#include "Opcodes.h"
+#include "WorldPacket.h"
+#include "WorldSession.h"
+
+enum MaxSkillLevelForEachProfessionRank
+{
+    MAX_SKILL_LEVEL_APPRENTICE   = 75,
+    MAX_SKILL_LEVEL_JOURNEYMAN   = 150,
+    MAX_SKILL_LEVEL_EXPERT       = 225,
+    MAX_SKILL_LEVEL_ARTISAN      = 300,
+    MAX_SKILL_LEVEL_MASTER       = 375,
+    MAX_SKILL_LEVEL_GRAND_MASTER = 450
+};
 
 enum AlchemySpells
 {
