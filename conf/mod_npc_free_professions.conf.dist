@@ -34,6 +34,17 @@ NpcFreeProfessions.MasterRankCharacterLevelRequirement = 60
 NpcFreeProfessions.GrandMasterRankCharacterLevelRequirement = 70
 
 #
+#   NpcFreeProfessions.Enable.LearnAllRecipes
+#       Description: If enabled, learning any profession rank automatically unlocks
+#                    all recipes for that profession, regardless of the rank learned.
+#                    If disabled, recipes will not be unlocked automatically.
+#       Default:    1 - Enabled, default
+#                   0 - Disabled
+#
+
+NpcFreeProfessions.Enable.LearnAllRecipes = 1
+
+#
 #   NpcFreeProfessions.Enable.EachProfession
 #       Description: Enable/Disable each profession
 #       Default:    1 - Enabled, default
